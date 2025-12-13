@@ -3,8 +3,16 @@
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/Button';
 import { ParticleBackground } from '@/components/ui/ParticleBackground';
+import { AmuletScene } from '@/components/3d/AmuletScene';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
+
+// Dynamically import 3D scene to avoid SSR issues
+const AmuletScene3D = dynamic(
+  () => import('@/components/3d/AmuletScene').then((mod) => mod.AmuletScene),
+  { ssr: false }
+);
 
 export default function Home() {
   const router = useRouter();
@@ -65,6 +73,16 @@ export default function Home() {
           >
             The Secret of Time
           </motion.h2>
+
+          {/* 3D Amulet */}
+          <motion.div
+            className="w-full max-w-md h-96 mx-auto my-8"
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.8, duration: 1.2, ease: 'easeOut' }}
+          >
+            <AmuletScene3D interactive={true} />
+          </motion.div>
 
           {/* Decorative Divider */}
           <motion.div

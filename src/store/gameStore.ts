@@ -30,6 +30,7 @@ interface GameState {
   unlockCipher: (cipher: CipherType) => void;
   addSecret: (secret: string) => void;
   makeChoice: (choiceId: string, value: string) => void;
+  addChoice: (choiceId: string, value: string) => void;
   setLanguage: (lang: Language) => void;
   updateAudioVolume: (type: keyof GameSettings['audioVolume'], value: number) => void;
   nextDialogue: () => void;
@@ -175,6 +176,14 @@ export const useGameStore = create<GameState>()(
         })),
 
       makeChoice: (choiceId, value) =>
+        set((state) => ({
+          progress: {
+            ...state.progress,
+            choices: { ...state.progress.choices, [choiceId]: value },
+          },
+        })),
+
+      addChoice: (choiceId, value) =>
         set((state) => ({
           progress: {
             ...state.progress,
