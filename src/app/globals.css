@@ -1,26 +1,180 @@
 @import "tailwindcss";
 
+/* Mystical Filipino Color Palette */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Backgrounds */
+  --background: #0a0a0a;
+  --background-gradient-start: #0a0a0a;
+  --background-gradient-end: #1a1a2e;
+  --paper-light: #F5E6D3;
+
+  /* Text */
+  --foreground: #ededed;
+  --text-dark: #2C3E50;
+
+  /* Amulet Glow - Primary */
+  --gold: #FFD700;
+  --sunset-orange: #FF6B35;
+
+  /* Time Magic - Secondary */
+  --mystical-purple: #9B59B6;
+  --ethereal-blue: #3498DB;
+
+  /* Cultural Accent */
+  --antique-brass: #C9A961;
+  --mahogany: #8B4513;
+
+  /* Special Effects */
+  --glow-gold: rgba(255, 215, 0, 0.6);
+  --glow-purple: rgba(155, 89, 182, 0.4);
 }
 
 @theme inline {
+  /* Custom Colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-gold: var(--gold);
+  --color-sunset: var(--sunset-orange);
+  --color-purple: var(--mystical-purple);
+  --color-blue: var(--ethereal-blue);
+  --color-brass: var(--antique-brass);
+  --color-mahogany: var(--mahogany);
+  --color-paper: var(--paper-light);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Fonts */
+  --font-display: var(--font-cinzel);
+  --font-body: var(--font-crimson);
+  --font-dramatic: var(--font-playfair);
+  --font-mono: var(--font-fira);
+
+  /* Custom spacing for mystical effects */
+  --spacing-glow: 0 0 20px var(--glow-gold), 0 0 40px var(--glow-purple);
+
+  /* Animation durations */
+  --duration-fast: 200ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --duration-mystical: 1000ms;
 }
 
 body {
-  background: var(--background);
+  background: linear-gradient(135deg, var(--background-gradient-start) 0%, var(--background-gradient-end) 100%);
+  background-attachment: fixed;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-crimson), Georgia, serif;
+}
+
+/* Mystical Glow Effect */
+@keyframes mystical-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--glow-gold), 0 0 10px var(--glow-gold);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--glow-gold), 0 0 40px var(--glow-purple);
+  }
+}
+
+/* Time Travel Effect */
+@keyframes time-warp {
+  0% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.5) rotate(180deg);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1) rotate(360deg);
+    opacity: 1;
+  }
+}
+
+/* Utility Classes */
+.mystical-glow {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.floating {
+  animation: float 3s ease-in-out infinite;
+}
+
+.shimmer-effect {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 215, 0, 0.3) 50%,
+    transparent 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 3s infinite;
+}
+
+/* Filipino Pattern Borders */
+.filipino-border {
+  border-image: repeating-linear-gradient(
+    45deg,
+    var(--antique-brass) 0px,
+    var(--antique-brass) 10px,
+    var(--mahogany) 10px,
+    var(--mahogany) 20px
+  ) 1;
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection Color */
+::selection {
+  background-color: var(--gold);
+  color: var(--background);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--gold) 0%, var(--mystical-purple) 100%);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--sunset-orange);
 }
