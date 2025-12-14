@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/Button';
 import { useGameStore } from '@/store/gameStore';
 import { caesarDecrypt } from '@/lib/ciphers/caesar';
+import Image from 'next/image';
 
 interface CipherPuzzleProps {
   onComplete: () => void;
@@ -12,13 +13,13 @@ interface CipherPuzzleProps {
 
 export function CipherPuzzle({ onComplete }: CipherPuzzleProps) {
   const [shift, setShift] = useState(0);
-  const [userAnswer, setUserAnswer] = useState('');
+  const [userDecryptedText, setUserDecryptedText] = useState('');
   const [showHint, setShowHint] = useState(false);
   const [attempts, setAttempts] = useState(0);
   const [showTutorial, setShowTutorial] = useState(true);
   const [isCorrect, setIsCorrect] = useState(false);
 
-  const { settings, useHint: trackHint } = useGameStore();
+  const { settings, useHint: trackHint, unlockCipher } = useGameStore();
 
   // The encrypted message from Babaylan Tala
   const encryptedMessage = 'WKH DPXOHW ZDV EOHVVHG EB PB JUDQGPRWKHU';
@@ -27,14 +28,16 @@ export function CipherPuzzle({ onComplete }: CipherPuzzleProps) {
 
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
-  const decryptedMessage = caesarDecrypt(encryptedMessage, shift);
-  const isAnswerCorrect = decryptedMessage === correctAnswer;
-
   const handleSubmit = () => {
     setAttempts(attempts + 1);
 
-    if (isAnswerCorrect) {
+    // Compare user's typed answer with correct answer (case-insensitive, ignore spaces)
+    const cleanUserInput = userDecryptedText.replace(/\s/g, '').toUpperCase();
+    const cleanCorrectAnswer = correctAnswer.replace(/\s/g, '').toUpperCase();
+
+    if (cleanUserInput === cleanCorrectAnswer) {
       setIsCorrect(true);
+      unlockCipher('caesar');
       setTimeout(() => {
         onComplete();
       }, 3000);
@@ -54,8 +57,19 @@ export function CipherPuzzle({ onComplete }: CipherPuzzleProps) {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center p-6">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background-gradient-end to-background" />
+      {/* Background - Same as dialogue scene */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/assets/images/backgrounds/chapter1_bg.jpg"
+          alt="Pre-colonial Philippines settlement"
+          fill
+          className="object-cover"
+          priority
+          unoptimized
+        />
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/40" />
+      </div>
 
       <div className="relative z-10 max-w-5xl w-full">
         {/* Tutorial Overlay */}
@@ -98,8 +112,8 @@ export function CipherPuzzle({ onComplete }: CipherPuzzleProps) {
 
                   <p>
                     {settings.language === 'tl'
-                      ? 'Gamitin ang wheel sa ibaba upang mahanap ang tamang shift value at i-decrypt ang mensahe ni Babaylan Tala.'
-                      : 'Use the wheel below to find the correct shift value and decrypt Babaylan Tala\'s message.'
+                      ? 'Gamitin ang wheel bilang gabay para i-decrypt ang mensahe ni Babaylan Tala. I-type mo ang iyong sagot sa kahon.'
+                      : 'Use the wheel as a guide to decrypt Babaylan Tala\'s message. Type your answer in the box.'
                     }
                   </p>
                 </div>
@@ -147,10 +161,14 @@ export function CipherPuzzle({ onComplete }: CipherPuzzleProps) {
                   {settings.language === 'tl' ? 'Tama!' : 'Correct!'}
                 </h2>
 
-                <p className="font-body text-foreground/90 text-xl">
+                <div className="font-mono text-xl text-foreground/90 mb-4">
+                  "{correctAnswer}"
+                </div>
+
+                <p className="font-body text-foreground/90 text-lg">
                   {settings.language === 'tl'
-                    ? 'Nagawa mong i-decrypt ang mensahe!'
-                    : 'You\'ve decrypted the message!'
+                    ? 'Nag-unlock ka ng Caesar Cipher!'
+                    : 'You\'ve unlocked the Caesar Cipher!'
                   }
                 </p>
               </motion.div>
@@ -165,8 +183,8 @@ export function CipherPuzzle({ onComplete }: CipherPuzzleProps) {
           </h2>
           <p className="font-body text-foreground/80 text-lg">
             {settings.language === 'tl'
-              ? 'Hanapin ang tamang shift value upang basahin ang mensahe ni Babaylan Tala'
-              : 'Find the correct shift value to read Babaylan Tala\'s message'
+              ? 'Gamitin ang Caesar wheel bilang gabay at i-type ang iyong sagot'
+              : 'Use the Caesar wheel as a guide and type your answer'
             }
           </p>
         </div>
@@ -327,15 +345,22 @@ export function CipherPuzzle({ onComplete }: CipherPuzzleProps) {
               </p>
             </div>
 
-            {/* Decrypted message */}
+            {/* Manual Decryption Input */}
             <div className="bg-background/80 backdrop-blur-sm border-2 border-gold/30 rounded-xl p-6">
               <h3 className="font-display text-gold text-lg mb-4">
-                {settings.language === 'tl' ? 'Decrypted na Mensahe:' : 'Decrypted Message:'}
+                {settings.language === 'tl' ? 'I-type ang Iyong Sagot:' : 'Type Your Decrypted Answer:'}
               </h3>
-              <p className={`font-mono text-lg break-words leading-relaxed transition-colors ${
-                isAnswerCorrect ? 'text-gold' : 'text-foreground/70'
-              }`}>
-                {decryptedMessage}
+              <textarea
+                value={userDecryptedText}
+                onChange={(e) => setUserDecryptedText(e.target.value.toUpperCase())}
+                placeholder={settings.language === 'tl' ? 'I-type ang decrypted message dito...' : 'Type the decrypted message here...'}
+                className="w-full bg-background border-2 border-gold/50 rounded-lg px-4 py-3 font-mono text-lg text-gold focus:outline-none focus:border-gold transition-colors uppercase min-h-[120px] resize-none"
+                autoComplete="off"
+              />
+              <p className="text-sm text-foreground/60 mt-2">
+                {settings.language === 'tl'
+                  ? 'Gamitin ang Caesar wheel para i-decrypt ang mensahe'
+                  : 'Use the Caesar wheel to decrypt the message'}
               </p>
             </div>
 
@@ -352,13 +377,9 @@ export function CipherPuzzle({ onComplete }: CipherPuzzleProps) {
                 onClick={handleSubmit}
                 variant="primary"
                 size="lg"
-                glow={isAnswerCorrect}
-                disabled={isCorrect}
+                disabled={!userDecryptedText || isCorrect}
               >
-                {isAnswerCorrect
-                  ? settings.language === 'tl' ? '✓ Tama!' : '✓ Correct!'
-                  : settings.language === 'tl' ? 'Tingnan ang Sagot' : 'Check Answer'
-                }
+                {settings.language === 'tl' ? 'Suriin ang Solusyon' : 'Check Solution'}
               </Button>
             </div>
           </div>

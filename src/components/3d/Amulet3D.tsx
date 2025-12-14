@@ -48,7 +48,10 @@ export function Amulet3D({ scale = 1, rotationSpeed = 0.5 }: Amulet3DProps) {
 
     if (glowRef.current) {
       const glowPulse = Math.sin(state.clock.elapsedTime * 2) * 0.3 + 0.7;
-      glowRef.current.material.opacity = glowPulse * 0.15;
+      const material = glowRef.current.material;
+      if (!Array.isArray(material)) {
+        material.opacity = glowPulse * 0.15;
+      }
     }
 
     if (particlesRef.current) {

@@ -6,6 +6,7 @@ import { TypeAnimation } from 'react-type-animation';
 import { Button } from '@/components/ui/Button';
 import { useGameStore } from '@/store/gameStore';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 
 const AmuletScene3D = dynamic(
   () => import('@/components/3d/AmuletScene').then((mod) => mod.AmuletScene),
@@ -77,7 +78,20 @@ P.S. - Ang unang cipher ay simple. Ginamit ito ni Caesar noong kanyang panahon. 
   const displayLetter = settings.language === 'tl' ? letterContent.tl : letterContent.en;
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-b from-background to-background-gradient-end overflow-hidden flex items-center justify-center">
+    <div className="relative min-h-screen overflow-hidden flex items-center justify-center">
+      {/* Background Image - Same as Lola's room */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/assets/images/backgrounds/prologue_bg.jpg"
+          alt="Lola's room in the ancestral house"
+          fill
+          className="object-cover"
+          priority
+          unoptimized
+        />
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/50" />
+      </div>
       <AnimatePresence mode="wait">
         {/* Phase 1: Baúl Opening */}
         {phase === 'opening' && (

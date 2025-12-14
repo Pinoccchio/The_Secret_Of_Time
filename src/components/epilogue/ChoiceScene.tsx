@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/Button';
 import { useGameStore } from '@/store/gameStore';
+import Image from 'next/image';
 
 interface ChoiceSceneProps {
   onChoice: (choice: 'share' | 'protect') => void;
@@ -19,9 +20,22 @@ export function ChoiceScene({ onChoice }: ChoiceSceneProps) {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center p-6">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background to-background-gradient-end" />
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/assets/images/backgrounds/epilogue_bg.jpg"
+          alt="Lola's room - Present day"
+          fill
+          className="object-cover"
+          priority
+          unoptimized
+        />
+        {/* Warm overlay */}
+        <div className="absolute inset-0 bg-black/40" />
+      </div>
+
+      <div className="relative z-10 min-h-screen flex items-center justify-center p-6">
 
       {/* Mystical effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -220,6 +234,7 @@ export function ChoiceScene({ onChoice }: ChoiceSceneProps) {
           </p>
         </motion.div>
       </motion.div>
+      </div>
     </div>
   );
 }

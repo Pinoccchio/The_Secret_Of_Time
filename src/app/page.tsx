@@ -132,9 +132,9 @@ export default function Home() {
             </footer>
           </motion.blockquote>
 
-          {/* CTA Buttons */}
+          {/* CTA Button */}
           <motion.div
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-12"
+            className="flex justify-center items-center mt-12"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.8, duration: 0.8 }}
@@ -161,15 +161,6 @@ export default function Home() {
                 </svg>
                 Begin Journey
               </span>
-            </Button>
-
-            <Button
-              onClick={() => alert('Coming soon! For now, start with Begin Journey.')}
-              variant="ghost"
-              size="lg"
-              glow={false}
-            >
-              Learn About Ciphers
             </Button>
           </motion.div>
 
@@ -212,7 +203,6 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 2.3 + index * 0.2 }}
               >
-                <div className="text-4xl mb-3">{feature.icon}</div>
                 <h3 className="font-display text-gold text-lg mb-2">
                   {feature.title}
                 </h3>
@@ -224,29 +214,6 @@ export default function Home() {
           </motion.div>
         </motion.div>
 
-        {/* Scroll Indicator */}
-        <motion.div
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 1.5 }}
-        >
-          <div className="text-gold/50 text-sm font-display flex flex-col items-center gap-2">
-            <span>Scroll to explore</span>
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 14l-7 7m0 0l-7-7m7 7V3"
-              />
-            </svg>
-          </div>
-        </motion.div>
       </div>
     </main>
   );
