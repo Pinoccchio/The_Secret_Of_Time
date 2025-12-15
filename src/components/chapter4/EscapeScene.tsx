@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { useGameStore } from '@/store/gameStore';
 import Image from 'next/image';
+import { GalaxyTransition } from '@/components/shared/GalaxyTransition';
 
 interface EscapeSceneProps {
   onComplete: () => void;
@@ -387,127 +388,13 @@ export function EscapeScene({ onComplete }: EscapeSceneProps) {
 
           {/* Time Travel Phase - Galaxy transition */}
           {phase === 'travel' && (
-            <div className="fixed inset-0 z-50 bg-black flex items-center justify-center overflow-hidden">
-              {/* Galaxy background */}
-              <div className="absolute inset-0">
-                {Array.from({ length: 100 }).map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute w-1 h-1 bg-white rounded-full"
-                    style={{
-                      left: `${Math.random() * 100}%`,
-                      top: `${Math.random() * 100}%`,
-                    }}
-                    animate={{
-                      opacity: [0, 1, 0],
-                      scale: [0, 1, 0],
-                    }}
-                    transition={{
-                      duration: 2,
-                      delay: Math.random() * 2,
-                      repeat: Infinity,
-                    }}
-                  />
-                ))}
-              </div>
-
-              {/* Time travel vortex */}
-              <motion.div
-                className="absolute inset-0"
-                animate={{
-                  background: [
-                    'radial-gradient(circle, rgba(212,175,55,0.3) 0%, rgba(0,0,0,1) 70%)',
-                    'radial-gradient(circle, rgba(147,112,219,0.3) 0%, rgba(0,0,0,1) 70%)',
-                    'radial-gradient(circle, rgba(212,175,55,0.3) 0%, rgba(0,0,0,1) 70%)',
-                  ],
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                }}
-              />
-
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-center relative z-10"
-              >
-                <h2 className="font-dramatic text-5xl text-sunset mb-8">
-                  {settings.language === 'tl' ? 'Bumibiyahe Nang Magkasama...' : 'Traveling Together...'}
-                </h2>
-
-                <motion.div
-                  className="space-y-4 text-lg text-foreground/90 font-body max-w-2xl mx-auto"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 }}
-                >
-                  <motion.p
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 1 }}
-                  >
-                    {settings.language === 'tl'
-                      ? 'Sa pamamagitan ng kadiliman ng Martial Law...'
-                      : 'Through the darkness of Martial Law...'}
-                  </motion.p>
-                  <motion.p
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 1.5 }}
-                  >
-                    {settings.language === 'tl'
-                      ? 'Sa pag-asa ng mga estudyante...'
-                      : 'Through the hope of students...'}
-                  </motion.p>
-                  <motion.p
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 2 }}
-                  >
-                    {settings.language === 'tl'
-                      ? 'Sa propesiya ng People Power...'
-                      : 'Through the prophecy of People Power...'}
-                  </motion.p>
-                  <motion.p
-                    initial={{ opacity: 0, scale: 1.2 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 2.5 }}
-                    className="text-gold font-dramatic text-2xl mt-8"
-                  >
-                    {settings.language === 'tl'
-                      ? '1983 → 1986'
-                      : '1983 → 1986'}
-                  </motion.p>
-                </motion.div>
-
-                {/* Golden hands holding particle effects */}
-                <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                  {Array.from({ length: 40 }).map((_, i) => (
-                    <motion.div
-                      key={i}
-                      className="absolute w-2 h-2 bg-gold rounded-full"
-                      initial={{
-                        x: '50%',
-                        y: '50%',
-                        scale: 0,
-                      }}
-                      animate={{
-                        x: `${Math.random() * 100}%`,
-                        y: `${Math.random() * 100}%`,
-                        scale: [0, 1, 0],
-                        opacity: [0, 1, 0],
-                      }}
-                      transition={{
-                        duration: 2.5,
-                        delay: i * 0.08,
-                        ease: 'easeOut',
-                      }}
-                    />
-                  ))}
-                </div>
-              </motion.div>
-            </div>
+            <GalaxyTransition
+              fromYear="1983 CE"
+              toYear="1986 CE"
+              fromEra={settings.language === 'tl' ? 'Batas Militar' : 'Martial Law'}
+              toEra={settings.language === 'tl' ? 'Rebolusyong EDSA' : 'EDSA Revolution'}
+              language={settings.language}
+            />
           )}
 
           {/* Complete - Fade to next chapter */}

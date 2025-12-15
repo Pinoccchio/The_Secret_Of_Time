@@ -124,6 +124,7 @@ export function ArrivalScene({ onComplete }: ArrivalSceneProps) {
           {/* Title - Only show at first dialogue */}
           {dialogueIndex === 0 && (
             <motion.div
+              key="chapter5-title"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1 }}
@@ -142,64 +143,63 @@ export function ArrivalScene({ onComplete }: ArrivalSceneProps) {
           )}
 
           {/* Character Portraits - RPG Style */}
-          <AnimatePresence>
-            {currentDialogue?.characterImage && (
-              <motion.div
-                key={currentDialogue.character}
-                className={`
-                  absolute bottom-[280px] z-40
-                  ${isMainCharacter ? 'left-8 md:left-16' : 'right-8 md:right-16'}
-                `}
-                initial={isSameCharacter ? false : {
-                  opacity: 0,
-                  x: isMainCharacter ? -100 : 100,
-                  y: 50
-                }}
-                animate={{
-                  opacity: 1,
-                  x: 0,
-                  y: 0
-                }}
-                exit={{
-                  opacity: 0,
-                  x: isMainCharacter ? -100 : 100,
-                  y: 50
-                }}
-                transition={{
-                  duration: 0.5,
-                  ease: 'easeOut'
-                }}
-              >
-                <div className="relative">
-                  {/* Character portrait - no border */}
-                  <div className="w-48 h-48 md:w-64 md:h-64 overflow-hidden">
-                    <img
-                      src={currentDialogue.characterImage}
-                      alt={currentDialogue.character}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-
-                  {/* Character name label */}
-                  <div className="
-                    absolute -bottom-2 left-1/2 -translate-x-1/2
-                    bg-background/95 backdrop-blur-sm
-                    border-2 border-gold/70
-                    rounded-full
-                    px-4 py-1
-                    whitespace-nowrap
-                  ">
-                    <p className="font-display text-gold text-sm">
-                      {currentDialogue.character}
-                    </p>
-                  </div>
+          {currentDialogue?.characterImage && (
+            <motion.div
+              key={currentDialogue.character}
+              className={`
+                absolute bottom-[280px] z-40
+                ${isMainCharacter ? 'left-8 md:left-16' : 'right-8 md:right-16'}
+              `}
+              initial={isSameCharacter ? false : {
+                opacity: 0,
+                x: isMainCharacter ? -100 : 100,
+                y: 50
+              }}
+              animate={{
+                opacity: 1,
+                x: 0,
+                y: 0
+              }}
+              exit={{
+                opacity: 0,
+                x: isMainCharacter ? -100 : 100,
+                y: 50
+              }}
+              transition={{
+                duration: 0.5,
+                ease: 'easeOut'
+              }}
+            >
+              <div className="relative">
+                {/* Character portrait - no border */}
+                <div className="w-48 h-48 md:w-64 md:h-64 overflow-hidden">
+                  <img
+                    src={currentDialogue.characterImage}
+                    alt={currentDialogue.character}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+
+                {/* Character name label */}
+                <div className="
+                  absolute -bottom-2 left-1/2 -translate-x-1/2
+                  bg-background/95 backdrop-blur-sm
+                  border-2 border-gold/70
+                  rounded-full
+                  px-4 py-1
+                  whitespace-nowrap
+                ">
+                  <p className="font-display text-gold text-sm">
+                    {currentDialogue.character}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          )}
 
           {/* Dialogue Box - Fixed at bottom */}
           <motion.div
+            key="ch5-dialogue-box"
             className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6"
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -228,7 +228,7 @@ export function ArrivalScene({ onComplete }: ArrivalSceneProps) {
                   <div className="flex gap-1">
                     {dialogues.map((_, index) => (
                       <div
-                        key={index}
+                        key={`ch5-dialogue-dot-${index}`}
                         className={`
                           w-2 h-2 rounded-full
                           ${index === dialogueIndex ? 'bg-gold' : 'bg-foreground/30'}

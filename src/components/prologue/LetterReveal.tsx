@@ -136,26 +136,25 @@ P.S. - Ang unang cipher ay simple. Ginamit ito ni Caesar noong kanyang panahon. 
 
         {/* Phase 2: 3D Amulet Reveal */}
         {phase === 'amulet' && (
-          <motion.div
-            key="amulet"
-            className="text-center max-w-4xl px-6"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-          >
+          <div className="text-center max-w-4xl px-6">
+            {/* Title - appears at top */}
             <motion.h2
               className="font-display text-4xl text-gold mb-6"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" }}
+              style={{ opacity: 1 }}
             >
               The Amulet of Time
             </motion.h2>
 
+            {/* Description - appears below title */}
             <motion.p
-              className="font-body text-foreground/80 text-lg mb-8"
+              className="font-body text-foreground text-lg mb-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
+              transition={{ delay: 0.6, duration: 0.8, ease: "easeOut" }}
+              style={{ opacity: 1 }}
             >
               {settings.language === 'tl'
                 ? 'Isang mahiwagang anting-anting ang kumikislap sa loob ng baúl...'
@@ -163,27 +162,33 @@ P.S. - Ang unang cipher ay simple. Ginamit ito ni Caesar noong kanyang panahon. 
               }
             </motion.p>
 
-            {/* 3D Amulet */}
+            {/* 3D Amulet - appears in middle */}
             <motion.div
               className="w-full max-w-lg h-96 mx-auto mb-8 cursor-pointer"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 1 }}
+              transition={{ delay: 0, duration: 1 }}
               whileHover={{ scale: 1.05 }}
               onClick={handleAmuletClick}
             >
               <AmuletScene3D interactive={true} />
             </motion.div>
 
-            <motion.div
-              className="font-body text-brass/80 text-base italic"
+            {/* Click instruction - appears at bottom */}
+            <motion.p
+              className="font-body text-brass text-base italic"
               initial={{ opacity: 0 }}
-              animate={{ opacity: [0.5, 1, 0.5] }}
-              transition={{ delay: 1, duration: 2, repeat: Infinity }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1, duration: 0.5 }}
             >
-              Click the amulet to examine it
-            </motion.div>
-          </motion.div>
+              <motion.span
+                animate={{ opacity: [0.7, 1, 0.7] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              >
+                Click the amulet to examine it
+              </motion.span>
+            </motion.p>
+          </div>
         )}
 
         {/* Phase 3: Letter Reading */}

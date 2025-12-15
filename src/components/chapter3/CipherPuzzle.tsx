@@ -27,6 +27,7 @@ export function CipherPuzzle({ onComplete }: CipherPuzzleProps) {
   const [showHint, setShowHint] = useState(false);
   const [showGrid, setShowGrid] = useState(false);
   const [solved, setSolved] = useState(false);
+  const [showError, setShowError] = useState(false);
 
   const playfairGrid = keyword.length >= 3 ? generatePlayfairGrid(keyword) : null;
   const formattedEncrypted = formatPlayfairCiphertext(CHAPTER3_ENCRYPTED);
@@ -45,6 +46,12 @@ export function CipherPuzzle({ onComplete }: CipherPuzzleProps) {
       }, 3000);
     } else {
       setAttempts(attempts + 1);
+      // Show error feedback
+      setShowError(true);
+      setTimeout(() => {
+        setShowError(false);
+      }, 3000);
+
       if (attempts >= 1) {
         setShowHint(true);
       }
@@ -374,6 +381,54 @@ export function CipherPuzzle({ onComplete }: CipherPuzzleProps) {
                     {settings.language === 'tl'
                       ? 'Nag-unlock ka ng Playfair Cipher! Naligtas mo ang buhay ng iyong mga kasama...'
                       : "You've unlocked the Playfair Cipher! You saved the lives of your comrades..."}
+                  </p>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Error Feedback overlay */}
+          <AnimatePresence>
+            {showError && (
+              <motion.div
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <motion.div
+                  className="max-w-md bg-gradient-to-br from-red-900/90 to-background/90 border-2 border-red-500/50 rounded-xl p-8 text-center"
+                  initial={{ scale: 0.8, y: 50 }}
+                  animate={{ scale: 1, y: 0 }}
+                  exit={{ scale: 0.8, y: 50 }}
+                  transition={{ type: 'spring', duration: 0.5 }}
+                >
+                  <motion.div
+                    className="text-6xl mb-4"
+                    animate={{
+                      rotate: [0, -10, 10, -10, 0],
+                    }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    ❌
+                  </motion.div>
+
+                  <h2 className="font-display text-3xl text-red-400 mb-4">
+                    {settings.language === 'tl' ? 'Mali' : 'Incorrect'}
+                  </h2>
+
+                  <p className="font-body text-foreground/90 text-lg mb-2">
+                    {settings.language === 'tl'
+                      ? 'Ang iyong sagot ay hindi tama.'
+                      : 'Your answer is not correct.'
+                    }
+                  </p>
+
+                  <p className="font-body text-foreground/70 text-sm">
+                    {settings.language === 'tl'
+                      ? 'Subukan muli. Gamitin ang keyword at Playfair grid.'
+                      : 'Try again. Use the keyword and Playfair grid.'
+                    }
                   </p>
                 </motion.div>
               </motion.div>
