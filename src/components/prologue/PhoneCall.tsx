@@ -52,16 +52,8 @@ export function PhoneCall({ onComplete }: PhoneCallProps) {
     },
   ];
 
-  useEffect(() => {
-    // Phone rings for 3 seconds
-    const ringTimer = setTimeout(() => {
-      setIsRinging(false);
-    }, 3000);
-
-    return () => clearTimeout(ringTimer);
-  }, []);
-
   const handleAnswerCall = () => {
+    setIsRinging(false);
     setCallAnswered(true);
   };
 
@@ -291,7 +283,7 @@ export function PhoneCall({ onComplete }: PhoneCallProps) {
             <div className="max-w-2xl w-full">
               <div className="bg-background/90 backdrop-blur-md border-2 border-gold/50 rounded-xl p-8 mb-8">
                 <h2 className="font-display text-3xl text-gold mb-4 text-center drop-shadow-[0_2px_8px_rgba(212,175,55,0.9)]" style={{ textShadow: '2px 2px 6px rgba(0,0,0,0.9)' }}>
-                  {settings.language === 'tl' ? 'Ano ang Gagawin Mo?' : 'What Will You Do?'}
+                  {settings.language === 'tl' ? 'Kailangan Mo Nang Umuwi' : 'You Need to Go Home'}
                 </h2>
 
                 <p className="font-body text-white text-lg mb-8 text-center" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>
@@ -301,39 +293,21 @@ export function PhoneCall({ onComplete }: PhoneCallProps) {
                   }
                 </p>
 
-                <div className="space-y-4">
-                  <Button
-                    onClick={() => handleChoice('now')}
-                    variant="primary"
-                    size="lg"
-                    glow={true}
-                    className="w-full"
-                  >
-                    <span className="flex items-center justify-center gap-2">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
-                      {settings.language === 'tl' ? 'Pumunta sa lumang bahay ngayon' : 'Go to the ancestral house now'}
-                    </span>
-                  </Button>
-
-                  <Button
-                    onClick={() => handleChoice('morning')}
-                    variant="secondary"
-                    size="lg"
-                    className="w-full"
-                  >
-                    {settings.language === 'tl' ? 'Maghintay hanggang umaga' : 'Wait until morning'}
-                  </Button>
-                </div>
+                <Button
+                  onClick={() => handleChoice('now')}
+                  variant="primary"
+                  size="lg"
+                  glow={true}
+                  className="w-full"
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                    {settings.language === 'tl' ? 'Pumunta sa lumang bahay ngayon' : 'Go to the ancestral house now'}
+                  </span>
+                </Button>
               </div>
-
-              <p className="font-body text-brass text-sm text-center italic" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
-                {settings.language === 'tl'
-                  ? '"Ang mga desisyon ay may kaakibat na kahihinatnan..."'
-                  : '"Every choice has consequences..."'
-                }
-              </p>
             </div>
           </motion.div>
         )}

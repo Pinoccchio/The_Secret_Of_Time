@@ -27,6 +27,7 @@ export function CipherPuzzle({ onComplete }: CipherPuzzleProps) {
   const [showTutorial, setShowTutorial] = useState(true);
   const [isCorrect, setIsCorrect] = useState(false);
   const [showVisualization, setShowVisualization] = useState(false);
+  const [showError, setShowError] = useState(false);
 
   // Interactive visualization controls
   const [customKeyword, setCustomKeyword] = useState(CHAPTER5_KEYWORD);
@@ -38,12 +39,13 @@ export function CipherPuzzle({ onComplete }: CipherPuzzleProps) {
     ? columnarTranspositionDecrypt(CHAPTER5_ENCRYPTED, keyword)
     : '';
 
-  const isAnswerCorrect = (keyword.toUpperCase() === CHAPTER5_KEYWORD &&
-    decryptedMessage.replace(/\s/g, '') === CHAPTER5_PLAINTEXT) ||
-    userDecryptedText.replace(/\s/g, '').toUpperCase() === CHAPTER5_PLAINTEXT;
-
   const handleSubmit = () => {
     setAttempts(attempts + 1);
+
+    // Check if answer is correct: user must type the decrypted text
+    const cleanUserInput = userDecryptedText.replace(/\s/g, '').toUpperCase();
+    const cleanCorrectAnswer = CHAPTER5_PLAINTEXT;
+    const isAnswerCorrect = cleanUserInput === cleanCorrectAnswer;
 
     if (isAnswerCorrect) {
       setIsCorrect(true);
@@ -52,6 +54,12 @@ export function CipherPuzzle({ onComplete }: CipherPuzzleProps) {
         onComplete();
       }, 3000);
     } else {
+      // Show error feedback
+      setShowError(true);
+      setTimeout(() => {
+        setShowError(false);
+      }, 3000);
+
       if (attempts >= 1 && !showHint) {
         setShowHint(true);
       }
@@ -233,15 +241,63 @@ export function CipherPuzzle({ onComplete }: CipherPuzzleProps) {
           )}
         </AnimatePresence>
 
+        {/* Error Feedback overlay */}
+        <AnimatePresence>
+          {showError && (
+            <motion.div
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <motion.div
+                className="max-w-md bg-gradient-to-br from-red-900/90 to-background/90 border-2 border-red-500/50 rounded-xl p-8 text-center"
+                initial={{ scale: 0.8, y: 50 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.8, y: 50 }}
+                transition={{ type: 'spring', duration: 0.5 }}
+              >
+                <motion.div
+                  className="text-6xl mb-4"
+                  animate={{
+                    rotate: [0, -10, 10, -10, 0],
+                  }}
+                  transition={{ duration: 0.5 }}
+                >
+                  ❌
+                </motion.div>
+
+                <h2 className="font-display text-3xl text-red-400 mb-4">
+                  {settings.language === 'tl' ? 'Mali' : 'Incorrect'}
+                </h2>
+
+                <p className="font-body text-foreground/90 text-lg mb-2">
+                  {settings.language === 'tl'
+                    ? 'Ang iyong sagot ay hindi tama.'
+                    : 'Your answer is not correct.'
+                  }
+                </p>
+
+                <p className="font-body text-foreground/70 text-sm">
+                  {settings.language === 'tl'
+                    ? 'Subukan muli. Hanapin ang tamang keyword.'
+                    : 'Try again. Find the correct keyword.'
+                  }
+                </p>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
           <h1 className="font-display text-5xl text-gold mb-4">
-            {settings.language === 'tl' ? 'I-decrypt ang Mensahe' : 'Decrypt the Message'}
+            {settings.language === 'tl' ? 'Ang Huling Lihim' : 'The Final Secret'}
           </h1>
-          <p className="font-body text-foreground/80 text-lg">
+          <p className="font-body text-foreground/80 text-lg max-w-3xl mx-auto">
             {settings.language === 'tl'
-              ? 'Hanapin ang tamang keyword upang malaman ang katotohanan ni Maria'
-              : 'Find the correct keyword to learn Maria\'s truth'
+              ? 'Si Maria ay nag-iwan ng isang mensahe. Ang susi ay nakatago sa kasaysayan ng rebolusyon na ito—ang panahon kung kailan ang mga Pilipino ay nagtayo bilang isa.'
+              : 'Maria left a message. The key is hidden in the history of this revolution—the time when Filipinos stood as one.'
             }
           </p>
         </motion.div>
@@ -278,10 +334,10 @@ export function CipherPuzzle({ onComplete }: CipherPuzzleProps) {
                 maxLength={10}
                 autoComplete="off"
               />
-              <p className="text-sm text-foreground/60 mt-2">
+              <p className="text-sm text-foreground/60 mt-2 italic">
                 {settings.language === 'tl'
-                  ? 'Subukan ang mga salita na may kaugnayan sa People Power Revolution'
-                  : 'Try words related to the People Power Revolution'
+                  ? '"Ang tunay na lakas ay hindi nakasalalay sa mga diktador, kundi sa mga..."'
+                  : '"True power lies not in dictators, but in the..."'
                 }
               </p>
             </div>
@@ -328,10 +384,7 @@ export function CipherPuzzle({ onComplete }: CipherPuzzleProps) {
                 className="w-full mt-4"
                 disabled={isCorrect || userDecryptedText.length < 5}
               >
-                {isAnswerCorrect
-                  ? settings.language === 'tl' ? '✓ Tama!' : '✓ Correct!'
-                  : settings.language === 'tl' ? 'Suriin ang Solusyon' : 'Check Solution'
-                }
+                {settings.language === 'tl' ? 'Suriin ang Solusyon' : 'Check Solution'}
               </Button>
             </div>
           </div>
@@ -482,23 +535,28 @@ export function CipherPuzzle({ onComplete }: CipherPuzzleProps) {
                   className="bg-gradient-to-br from-gold/20 to-sunset/20 border-2 border-gold/50 rounded-xl p-6"
                 >
                   <h3 className="font-dramatic text-xl text-gold mb-3 flex items-center">
-                    💡 {settings.language === 'tl' ? 'Pahiwatig' : 'Hint'}
+                    💡 {settings.language === 'tl' ? 'Mensahe ni Maria' : 'Maria\'s Message'}
                   </h3>
-                  <div className="space-y-2 text-sm text-foreground/90">
-                    <p>
+                  <div className="space-y-3 text-sm text-foreground/90">
+                    <p className="italic text-sunset">
                       {settings.language === 'tl'
-                        ? '• Ang keyword ay may 6 na letra'
-                        : '• The keyword has 6 letters'}
+                        ? '"Tandaan mo, apo. Noong 1986, hindi mga sundalo ang nagligtas sa Pilipinas..."'
+                        : '"Remember, grandchild. In 1986, it wasn\'t soldiers who saved the Philippines..."'}
                     </p>
-                    <p>
+                    <p className="text-gold font-semibold">
                       {settings.language === 'tl'
-                        ? '• Nagsisimula sa "P" at tungkol sa rebolusyon'
-                        : '• Starts with "P" and relates to the revolution'}
+                        ? '...hindi mga pulitiko...'
+                        : '...not politicians...'}
                     </p>
-                    <p className="text-xs text-foreground/70 mt-3">
+                    <p className="text-purple-400 font-semibold">
                       {settings.language === 'tl'
-                        ? '• Isipin: Ano ang tawag sa peaceful revolution? _____ Power'
-                        : '• Think: What was this peaceful revolution called? _____ Power'}
+                        ? '...kundi ang mga tao. Ang keyword ay 6 na letra. P_____ Power."'
+                        : '...but the people. The keyword is 6 letters. P_____ Power."'}
+                    </p>
+                    <p className="text-xs text-foreground/60 mt-3 border-t border-gold/30 pt-2">
+                      {settings.language === 'tl'
+                        ? '🕊️ Ang rebolusyong ito ay tinawag na "_____ Power Revolution"'
+                        : '🕊️ This revolution was called the "_____ Power Revolution"'}
                     </p>
                   </div>
                 </motion.div>

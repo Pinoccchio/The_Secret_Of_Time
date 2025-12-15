@@ -74,7 +74,7 @@ export default function Home() {
             The Secret of Time
           </motion.h2>
 
-          {/* 3D Amulet */}
+          {/* 3D Amulet - Positioned between title and description */}
           <motion.div
             className="w-full max-w-md h-96 mx-auto my-8"
             initial={{ opacity: 0, scale: 0.5 }}
