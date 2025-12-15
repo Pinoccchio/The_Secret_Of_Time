@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/Button';
+import Image from 'next/image';
 
 interface AncestralHouseProps {
   onComplete: () => void;
@@ -19,17 +20,17 @@ export function AncestralHouse({ onComplete }: AncestralHouseProps) {
     photo: {
       title: 'Old Family Photo',
       description: 'A sepia-toned photograph from the 1940s. Your lola looks young, standing beside a mysterious figure in traditional clothing. The back reads: "1945 - Never forget."',
-      position: { top: '25%', left: '20%' },
+      position: { top: '18%', right: '11%' }, // Upper right - on the framed photo on wall
     },
     desk: {
       title: 'Antique Desk',
       description: 'Lola\'s writing desk, covered in old letters and documents. You notice several coded messages written in elegant script. Some appear to use shifted letters...',
-      position: { top: '45%', right: '25%' },
+      position: { top: '52%', right: '28%' }, // Right side - near the desk/cabinet
     },
     baul: {
       title: 'Ancestral Baúl',
       description: 'An ornate wooden chest with brass fittings. The lock is old but well-maintained. This must be what Lola mentioned on the phone.',
-      position: { bottom: '30%', left: '50%' },
+      position: { top: '65%', left: '52%' }, // Center-bottom - the chest
       isMain: true,
     },
   };
@@ -54,7 +55,20 @@ export function AncestralHouse({ onComplete }: AncestralHouseProps) {
   const canOpenBaul = exploredHotspots.size >= 2;
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-b from-background-gradient-end to-background overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Background Image - Lola's Room */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/assets/images/backgrounds/prologue_bg.jpg"
+          alt="Lola's room in the ancestral house"
+          fill
+          className="object-cover"
+          priority
+          unoptimized
+        />
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/40" />
+      </div>
       {/* Intro Text */}
       <AnimatePresence>
         {showIntro && (

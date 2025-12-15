@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { TypeAnimation } from 'react-type-animation';
 import { Button } from '@/components/ui/Button';
 import { useGameStore } from '@/store/gameStore';
+import Image from 'next/image';
 
 interface EndingAProps {
   onComplete: () => void;
@@ -58,9 +59,22 @@ export function EndingA({ onComplete }: EndingAProps) {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center p-6">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-gold/5 via-background to-background" />
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/assets/images/backgrounds/epilogue_bg.jpg"
+          alt="Lola's room - Present day"
+          fill
+          className="object-cover"
+          priority
+          unoptimized
+        />
+        {/* Warm overlay with gold tint */}
+        <div className="absolute inset-0 bg-black/50 bg-gradient-to-b from-gold/10 to-transparent" />
+      </div>
+
+      <div className="relative z-10 min-h-screen flex items-center justify-center p-6">
 
       {/* Animated effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -97,21 +111,21 @@ export function EndingA({ onComplete }: EndingAProps) {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <h2 className="font-display text-gold text-sm tracking-widest mb-2">
+          <h2 className="font-display text-gold text-sm tracking-widest mb-2 drop-shadow-[0_2px_8px_rgba(212,175,55,0.9)]" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.9)' }}>
             {settings.language === 'tl' ? 'WAKAS A' : 'ENDING A'}
           </h2>
-          <h1 className="font-display text-3xl md:text-4xl text-gold mb-4">
+          <h1 className="font-display text-3xl md:text-4xl text-gold mb-4 drop-shadow-[0_2px_8px_rgba(212,175,55,0.9)]" style={{ textShadow: '2px 2px 6px rgba(0,0,0,0.9)' }}>
             {settings.language === 'tl' ? 'Ang Mundo ay Nag-iba' : 'The World Changed'}
           </h1>
         </motion.div>
 
         {/* Story text */}
         <motion.div
-          className="bg-background/90 backdrop-blur-md border-2 border-gold/50 rounded-xl p-8 mb-6"
+          className="bg-black/80 backdrop-blur-md border-2 border-gold/70 rounded-xl p-8 mb-6 shadow-2xl"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
         >
-          <div className="font-body text-foreground/90 text-lg leading-relaxed min-h-[150px] text-center">
+          <div className="font-body text-white text-lg leading-relaxed min-h-[150px] text-center" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
             <TypeAnimation
               key={dialogueIndex}
               sequence={[currentText]}
@@ -143,14 +157,14 @@ export function EndingA({ onComplete }: EndingAProps) {
         {/* Final message */}
         {dialogueIndex === dialogues.length - 1 && (
           <motion.div
-            className="mt-8 p-6 bg-gold/10 border-2 border-gold/50 rounded-xl text-center"
+            className="mt-8 p-6 bg-black/70 border-2 border-gold/70 rounded-xl text-center shadow-2xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <p className="font-display text-gold text-2xl mb-2">
+            <p className="font-display text-gold text-2xl mb-2 drop-shadow-[0_2px_8px_rgba(212,175,55,0.9)]" style={{ textShadow: '2px 2px 6px rgba(0,0,0,0.9)' }}>
               {settings.language === 'tl' ? 'Salamat sa Paglalakbay' : 'Thank You for Playing'}
             </p>
-            <p className="font-body text-foreground/80">
+            <p className="font-body text-white" style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>
               {settings.language === 'tl'
                 ? 'Ikaw ay nagtapos ng "Ang Lihim ng Panahon"'
                 : 'You completed "The Secret of Time"'
@@ -159,6 +173,7 @@ export function EndingA({ onComplete }: EndingAProps) {
           </motion.div>
         )}
       </motion.div>
+      </div>
     </div>
   );
 }

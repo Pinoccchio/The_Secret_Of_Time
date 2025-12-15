@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/Button';
 import { useRouter } from 'next/navigation';
 import { useGameStore } from '@/store/gameStore';
+import Image from 'next/image';
 
 interface PostCreditsProps {
   ending: 'share' | 'protect';
@@ -13,11 +14,29 @@ export function PostCredits({ ending }: PostCreditsProps) {
   const router = useRouter();
   const { settings, progress } = useGameStore();
 
-  const credits = [
-    { role: 'Created by', name: 'Claude Code Demo Project' },
-    { role: 'Story & Design', name: 'Cipher Adventure Game' },
-    { role: 'Ciphers Implemented', name: 'Caesar & Columnar Transposition' },
-    { role: 'Powered by', name: 'Next.js, React Three Fiber, Framer Motion' },
+  const developers = [
+    'Jan Miko Guevarra',
+    'Jan Carlo Surig',
+    'Joachim Olaco',
+    'Marlan Diva',
+  ];
+
+  const ciphers = [
+    'Caesar',
+    'Vigenère',
+    'Playfair',
+    'Rail Fence',
+    'Columnar Transposition',
+  ];
+
+  const technologies = [
+    'Next.js 16',
+    'React 19',
+    'TypeScript',
+    'Tailwind CSS',
+    'Framer Motion',
+    'React Three Fiber',
+    'Zustand',
   ];
 
   const stats = {
@@ -27,9 +46,22 @@ export function PostCredits({ ending }: PostCreditsProps) {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center p-6">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background to-background-gradient-end" />
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/assets/images/backgrounds/epilogue_bg.jpg"
+          alt="Lola's room - Present day"
+          fill
+          className="object-cover"
+          priority
+          unoptimized
+        />
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/60" />
+      </div>
+
+      <div className="relative z-10 min-h-screen flex items-center justify-center p-6">
 
       {/* Stars effect */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -89,24 +121,21 @@ export function PostCredits({ ending }: PostCreditsProps) {
 
           <div className="grid md:grid-cols-3 gap-6">
             <div className="text-center">
-              <div className="text-4xl mb-2">🔐</div>
-              <p className="font-body text-foreground/60 text-sm">
+              <p className="font-body text-foreground/60 text-sm mb-2">
                 {settings.language === 'tl' ? 'Mga Cipher' : 'Ciphers Learned'}
               </p>
-              <p className="font-display text-gold text-2xl">{stats.ciphersLearned}</p>
+              <p className="font-display text-gold text-3xl">{stats.ciphersLearned}</p>
             </div>
 
             <div className="text-center">
-              <div className="text-4xl mb-2">💎</div>
-              <p className="font-body text-foreground/60 text-sm">
+              <p className="font-body text-foreground/60 text-sm mb-2">
                 {settings.language === 'tl' ? 'Mga Lihim' : 'Secrets Found'}
               </p>
-              <p className="font-display text-gold text-2xl">{stats.hintsUsed}</p>
+              <p className="font-display text-gold text-3xl">{stats.hintsUsed}</p>
             </div>
 
             <div className="text-center">
-              <div className="text-4xl mb-2">{ending === 'share' ? '🌍' : '🔒'}</div>
-              <p className="font-body text-foreground/60 text-sm">
+              <p className="font-body text-foreground/60 text-sm mb-2">
                 {settings.language === 'tl' ? 'Iyong Desisyon' : 'Your Choice'}
               </p>
               <p className="font-display text-gold text-lg">{stats.ending}</p>
@@ -125,19 +154,81 @@ export function PostCredits({ ending }: PostCreditsProps) {
             {settings.language === 'tl' ? 'Mga Kredito' : 'Credits'}
           </h2>
 
-          <div className="space-y-4">
-            {credits.map((credit, index) => (
-              <motion.div
-                key={index}
-                className="text-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 2.5 + index * 0.2 }}
-              >
-                <p className="font-body text-brass/60 text-sm">{credit.role}</p>
-                <p className="font-display text-foreground text-lg">{credit.name}</p>
-              </motion.div>
-            ))}
+          <div className="space-y-6">
+            {/* Developers Section */}
+            <motion.div
+              className="text-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 2.5 }}
+            >
+              <p className="font-body text-brass/60 text-sm mb-3">
+                {settings.language === 'tl' ? 'Binuo ng' : 'Developed by'}
+              </p>
+              <div className="space-y-1">
+                {developers.map((developer, index) => (
+                  <motion.p
+                    key={index}
+                    className="font-display text-foreground text-lg"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 2.7 + index * 0.15 }}
+                  >
+                    {developer}
+                  </motion.p>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Ciphers Section */}
+            <motion.div
+              className="text-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 3.3 }}
+            >
+              <p className="font-body text-brass/60 text-sm mb-3">
+                {settings.language === 'tl' ? 'Mga Cipher na Ipinatupad' : 'Ciphers Implemented'}
+              </p>
+              <div className="space-y-1">
+                {ciphers.map((cipher, index) => (
+                  <motion.p
+                    key={index}
+                    className="font-display text-foreground text-lg"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 3.5 + index * 0.1 }}
+                  >
+                    {cipher}
+                  </motion.p>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Technologies Section */}
+            <motion.div
+              className="text-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 4.3 }}
+            >
+              <p className="font-body text-brass/60 text-sm mb-3">
+                {settings.language === 'tl' ? 'Pinagana ng' : 'Powered by'}
+              </p>
+              <div className="space-y-1">
+                {technologies.map((tech, index) => (
+                  <motion.p
+                    key={index}
+                    className="font-display text-foreground text-lg"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 4.5 + index * 0.1 }}
+                  >
+                    {tech}
+                  </motion.p>
+                ))}
+              </div>
+            </motion.div>
           </div>
         </motion.div>
 
@@ -146,7 +237,7 @@ export function PostCredits({ ending }: PostCreditsProps) {
           className="text-center mb-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 4 }}
+          transition={{ delay: 5.5 }}
         >
           <p className="font-body text-gold text-xl mb-2">
             {settings.language === 'tl' ? 'Salamat sa Paglalaro!' : 'Thank You for Playing!'}
@@ -161,10 +252,10 @@ export function PostCredits({ ending }: PostCreditsProps) {
 
         {/* Actions */}
         <motion.div
-          className="flex flex-col sm:flex-row gap-4 justify-center"
+          className="flex justify-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 4.5 }}
+          transition={{ delay: 6 }}
         >
           <Button
             onClick={() => router.push('/')}
@@ -174,17 +265,6 @@ export function PostCredits({ ending }: PostCreditsProps) {
           >
             {settings.language === 'tl' ? 'Bumalik sa Simula' : 'Return to Start'}
           </Button>
-
-          <Button
-            onClick={() => {
-              const otherEnding = ending === 'share' ? 'protect' : 'share';
-              router.push(`/epilogue?preview=${otherEnding}`);
-            }}
-            variant="ghost"
-            size="lg"
-          >
-            {settings.language === 'tl' ? 'Tignan ang Ibang Ending' : 'See Other Ending'}
-          </Button>
         </motion.div>
 
         {/* Easter egg */}
@@ -192,13 +272,14 @@ export function PostCredits({ ending }: PostCreditsProps) {
           className="mt-12 text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 5 }}
+          transition={{ delay: 6.5 }}
         >
           <p className="font-mono text-brass/40 text-xs">
             KHOOR ZRUOG • 47 43 22 47 43 34 • ⏳
           </p>
         </motion.div>
       </motion.div>
+      </div>
     </div>
   );
 }
