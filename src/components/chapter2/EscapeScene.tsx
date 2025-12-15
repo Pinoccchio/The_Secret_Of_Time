@@ -7,7 +7,11 @@ import { useRouter } from 'next/navigation';
 import { useGameStore } from '@/store/gameStore';
 import Image from 'next/image';
 
-export function EscapeScene() {
+interface EscapeSceneProps {
+  onComplete?: () => void;
+}
+
+export function EscapeScene({ onComplete }: EscapeSceneProps) {
   const [dialogueIndex, setDialogueIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const router = useRouter();
